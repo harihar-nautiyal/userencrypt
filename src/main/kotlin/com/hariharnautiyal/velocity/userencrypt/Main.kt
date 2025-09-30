@@ -12,7 +12,6 @@ import io.github.serpro69.kfaker.Faker
 import org.slf4j.Logger
 import java.nio.file.Path
 import java.sql.Connection
-import org.geysermc.floodgate.api.FloodgateApi
 import java.sql.DriverManager
 import java.util.UUID
 import kotlin.io.path.createDirectories
@@ -33,13 +32,32 @@ class Main @Inject constructor(
 ) {
     private lateinit var connection: Connection
     private val faker = Faker()
-    private var floodgateApi: FloodgateApi? = null
+    private var floodgateLink: FloodgateLink? = null
+
+    /**
+     * This private inner class isolates all Floodgate API code.
+     * The JVM will only attempt to load this class when we explicitly create an instance of it,
+     * preventing a NoClassDefFoundError if Floodgate is not installed.
+     */
+    private class FloodgateLink {
+        private val api = org.geysermc.floodgate.api.FloodgateApi.getInstance()
+
+        fun isFloodgatePlayer(uuid: UUID): Boolean {
+            return api.isFloodgatePlayer(uuid)
+        }
+    }
 
     @Subscribe
     fun onProxyInitialization(event: ProxyInitializeEvent) {
         if (proxyServer.pluginManager.isLoaded("floodgate")) {
-            this.floodgateApi = FloodgateApi.getInstance()
-            logger.info("Successfully hooked into Floodgate API. Bedrock players will be skipped.")
+            try {
+                this.floodgateLink = FloodgateLink()
+                logger.info("Successfully hooked into Floodgate API. Bedrock players will be skipped.")
+            } catch (e: NoClassDefFoundError) {
+                logger.warn("Floodgate plugin was found, but its API could not be loaded. Continuing without Floodgate support.")
+            }
+        } else {
+            logger.info("Floodgate not found. All players will be treated as Java players.")
         }
 
         try {
@@ -102,7 +120,7 @@ class Main @Inject constructor(
     @Subscribe
     fun onGameProfileRequest(event: GameProfileRequestEvent) {
         val playerUuid = event.gameProfile.id
-        if (floodgateApi?.isFloodgatePlayer(playerUuid) == true) {
+        if (floodgateLink?.isFloodgatePlayer(playerUuid) == true) {
             logger.info("Player '${event.username}' is a Floodgate (Bedrock) player. Skipping username encryption.")
             return
         }
