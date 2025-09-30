@@ -1,0 +1,19 @@
+# Gradle
+.gradle/
+build/
+run/
+
+# IDE
+.idea/
+
+# Build artifacts
+*.jar
+*.war
+*.ear
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
