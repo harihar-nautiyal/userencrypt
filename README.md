@@ -15,6 +15,10 @@ UserEncrypt mitigates this risk by assigning players a unique, irreversible user
 When a player joins for the first time, UserEncrypt generates a unique username for them. This new username is then stored in a local SQLite database, mapped to the player's original username. On subsequent joins, the plugin retrieves the assigned username from the database and applies it to the player. This ensures that the player's identity remains consistent and secure.
 
 ## Installation
+### Releases
+You can download latest version of userencrypt from [releases](https://github.com/harihar-nautiyal/userencrypt/releases)
+
+### Modrinth
 1. Download the latest version of the plugin from the [Modrinth page](https://harihar.site/projects/userencrypt).
 2. Place the downloaded `.jar` file into the `plugins` folder of your Velocity proxy.
 3. Restart your Velocity proxy.
