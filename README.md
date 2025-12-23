@@ -50,7 +50,7 @@ The compiled `.jar` file will be located in the `build/libs` directory.
 - **Version Control**: Git & GitHub for open-source collaboration
 
 ## Contributing
-Contributions are welcome! If you would like to contribute to the project, please feel free to open a pull request on the [GitHub repository](https.github.com/your-username/userencrypt).
+Contributions are welcome! If you would like to contribute to the project, please feel free to open a pull request on the [GitHub repository](https.github.com/harihar-nautiyal/userencrypt).
 
 ## License
 This project is licensed under the MIT License. See the `LICENSE` file for more details.
