@@ -1,4 +1,4 @@
-package com.hariharnautiyal.velocity.userencrypt;
+package org.turbomc.userencrypt;
 
 // The constants are replaced before compilation
 public class BuildConstants {
