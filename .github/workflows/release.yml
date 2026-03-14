@@ -10,7 +10,7 @@ jobs:
     name: Build and Release
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Required to create a release
+      contents: write
 
     steps:
       - name: Checkout code
@@ -25,12 +25,15 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
+      - name: Remove hardcoded Java home from gradle.properties
+        run: sed -i '/org.gradle.java.home/d' gradle.properties || true
+
       - name: Build with Gradle
         run: ./gradlew shadowJar
 
       - name: Create Release and Upload Artifact
         uses: softprops/action-gh-release@v1
         with:
-          files: build/libs/*-all.jar # Find the shadow jar
+          files: build/libs/*-all.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
